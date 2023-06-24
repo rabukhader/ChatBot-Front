@@ -3,7 +3,8 @@ class Chatbox {
         this.args = {
             openButton: document.querySelector('.chatbox__button'),
             chatBox: document.querySelector('.chatbox__support'),
-            sendButton: document.querySelector('.send__button')
+            sendButton: document.querySelector('.send__button'),
+            speakButton: document.querySelector('.speak__button')
         }
 
         this.state = false;
@@ -11,11 +12,13 @@ class Chatbox {
     }
 
     display() {
-        const {openButton, chatBox, sendButton} = this.args;
+        const {openButton, chatBox, sendButton, speakButton} = this.args;
 
         openButton.addEventListener('click', () => this.toggleState(chatBox))
 
         sendButton.addEventListener('click', () => this.onSendButton(chatBox))
+
+        speakButton.addEventListener('click', () => this.record())
 
         const node = chatBox.querySelector('input');
         node.addEventListener("keyup", ({key}) => {
@@ -25,7 +28,7 @@ class Chatbox {
         })
     }
 
-    toggleState(chatbox) {
+/*     toggleState(chatbox) {
         this.state = !this.state;
 
         // show or hides the box
@@ -34,7 +37,7 @@ class Chatbox {
         } else {
             chatbox.classList.remove('chatbox--active')
         }
-    }
+    } */
 
     onSendButton(chatbox) {
         var textField = chatbox.querySelector('input');
@@ -58,6 +61,7 @@ class Chatbox {
           .then(r => {
             let msg2 = { name: "Sam", message: r.answer };
             this.messages.push(msg2);
+            this.textToSpeech(r.answer);
             this.updateChatText(chatbox)
             textField.value = ''
 
@@ -84,7 +88,26 @@ class Chatbox {
         const chatmessage = chatbox.querySelector('.chatbox__messages');
         chatmessage.innerHTML = html;
     }
+
+
+    record(){ 
+        const recognition = new webkitSpeechRecognition()
+        recognition.lang = "en-GB";
+        recognition.onresult = function (event) {
+                document.getElementById('speech').value = event.results[0][0].transcript;
+                    }
+                    recognition.start();
+                }
+
+    textToSpeech(text){
+        let utterance = new SpeechSynthesisUtterance(text);
+        speechSynthesis.speak(utterance);
+
+    }
 }
+
+
+
 
 
 const chatbox = new Chatbox();

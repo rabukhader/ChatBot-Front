@@ -52,7 +52,7 @@ body {
     text-align: right;
 }
 
-.send__button {
+.send__button , .speak__button {
     padding: 6px;
     background: transparent;
     border: none;

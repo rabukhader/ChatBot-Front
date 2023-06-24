@@ -9,7 +9,7 @@
 <body>
 <div class="container">
     <div class="chatbox">
-        <div class="chatbox__support">
+        <div class="chatbox__support chatbox--active">
             <div class="chatbox__header">
                 <div class="chatbox__image--header">
                     <img src="/images/circleBot.png" alt="image">
@@ -23,8 +23,9 @@
                 <div></div>
             </div>
             <div class="chatbox__footer">
-                <input type="text" placeholder="Write a message...">
+                <input id="speech" type="text" placeholder="Write or Speak...">
                 <button class="chatbox__send--footer send__button">Send</button>
+                <button class="chatbox__send--footer speak__button">Speak</button>
             </div>
         </div>
         <div class="chatbox__button">
