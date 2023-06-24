@@ -28,16 +28,16 @@ class Chatbox {
         })
     }
 
-/*     toggleState(chatbox) {
+    toggleState(chatbox) {
         this.state = !this.state;
 
         // show or hides the box
-        if(this.state) {
+        if (this.state) {
             chatbox.classList.add('chatbox--active')
         } else {
             chatbox.classList.remove('chatbox--active')
         }
-    } */
+    }
 
     onSendButton(chatbox) {
         var textField = chatbox.querySelector('input');
@@ -46,20 +46,26 @@ class Chatbox {
             return;
         }
 
-        let msg1 = { name: "User", message: text1 }
+        let msg1 = {
+            name: "User",
+            message: text1
+        }
         this.messages.push(msg1);
 
         fetch('http://127.0.0.1:5000/predict', {
             method: 'POST',
-            body: JSON.stringify({ message: text1 }),
+            body: JSON.stringify(
+                {message: text1}
+            ),
             mode: 'cors',
             headers: {
-              'Content-Type': 'application/json'
-            },
-          })
-          .then(r => r.json())
-          .then(r => {
-            let msg2 = { name: "Sam", message: r.answer };
+                'Content-Type': 'application/json'
+            }
+        }).then(r => r.json()).then(r => {
+            let msg2 = {
+                name: "Sam",
+                message: r.answer
+            };
             this.messages.push(msg2);
             this.textToSpeech(r.answer);
             this.updateChatText(chatbox)
@@ -69,45 +75,39 @@ class Chatbox {
             console.error('Error:', error);
             this.updateChatText(chatbox)
             textField.value = ''
-          });
+        });
     }
 
     updateChatText(chatbox) {
         var html = '';
-        this.messages.slice().reverse().forEach(function(item, index) {
-            if (item.name === "Sam")
-            {
+        this.messages.slice().reverse().forEach(function (item, index) {
+            if (item.name === "Sam") {
                 html += '<div class="messages__item messages__item--visitor">' + item.message + '</div>'
-            }
-            else
-            {
+            } else {
                 html += '<div class="messages__item messages__item--operator">' + item.message + '</div>'
             }
-          });
+        });
 
         const chatmessage = chatbox.querySelector('.chatbox__messages');
         chatmessage.innerHTML = html;
     }
 
 
-    record(){ 
+    record() {
         const recognition = new webkitSpeechRecognition()
         recognition.lang = "en-GB";
         recognition.onresult = function (event) {
-                document.getElementById('speech').value = event.results[0][0].transcript;
-                    }
-                    recognition.start();
-                }
+            document.getElementById('speech').value = event.results[0][0].transcript;
+        }
+        recognition.start();
+    }
 
-    textToSpeech(text){
+    textToSpeech(text) {
         let utterance = new SpeechSynthesisUtterance(text);
         speechSynthesis.speak(utterance);
 
     }
 }
-
-
-
 
 
 const chatbox = new Chatbox();
